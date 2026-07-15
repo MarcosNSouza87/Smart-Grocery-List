@@ -32,3 +32,82 @@ Smart Grocery List helps users build shopping lists faster and smarter. Instead 
 - Claude API — used for free-text parsing, categorization, and complementary item suggestions
 
 ## 🏗 Architecture
+Mobile (React Native)
+↓
+REST API (Node.js/Express)
+↓
+PostgreSQL  ←→  Claude API (parsing & suggestions)
+↓
+Socket.io (real-time sync for shared lists)
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- PostgreSQL 14+
+- Expo CLI
+- Claude API key
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/MarcosNSouza87/smart-grocery-list.git
+cd smart-grocery-list
+
+# Install backend dependencies
+cd backend
+npm install
+
+# Install mobile dependencies
+cd ../mobile
+npm install
+```
+
+### Environment Variables
+
+Create a `.env` file in the `backend` folder:
+
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/grocery_list
+CLAUDE_API_KEY=your_claude_api_key
+JWT_SECRET=your_jwt_secret
+```
+
+### Running the project
+
+```bash
+# Backend
+cd backend
+npm run dev
+
+# Mobile
+cd mobile
+npx expo start
+```
+
+## 🧪 Testing
+
+```bash
+npm run test
+```
+
+## 📸 Screenshots / Demo
+
+*(Coming soon)*
+
+## 📍 Roadmap
+
+- [x] Project setup
+- [ ] Basic CRUD for lists and items
+- [ ] Authentication
+- [ ] Purchase history tracking
+- [ ] AI-powered quick add (free-text parsing)
+- [ ] Predictive suggestions
+- [ ] Real-time shared lists
+- [ ] Tests + CI
+- [ ] Deployment
+
+## 📄 License
+
+This project is licensed under the MIT License.
