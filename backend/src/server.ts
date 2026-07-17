@@ -5,8 +5,11 @@ import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import jwt from '@fastify/jwt';
 
+//import routes
 import { usersRoutes } from './routes/users.routes';
 import { authRoutes } from './routes/auth.routes';
+import { listsRoutes } from './routes/lists.routes';
+import { itemsRoutes } from './routes/items.routes';
 
 const app = Fastify({ logger: true });
 
@@ -31,12 +34,15 @@ async function main() {
     routePrefix: '/api-docs',
   });
 
-  app.get('/health', async () => {
-    return { status: 'ok', service: 'smart-grocery-list-api' };
-  });
+  // app.get('/health', async () => {
+  //   return { status: 'ok', service: 'smart-grocery-list-api' };
+  // });
 
+  //register routes
   await app.register(usersRoutes);
   await app.register(authRoutes);
+  await app.register(listsRoutes);
+  await app.register(itemsRoutes);
 
   const port = Number(process.env.PORT) || 3000;
   await app.listen({ port, host: '0.0.0.0' });
