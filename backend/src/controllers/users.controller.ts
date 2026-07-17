@@ -27,3 +27,16 @@ export async function createUser(request: FastifyRequest, reply: FastifyReply) {
   const { password: _, ...safeUser } = user;
   return reply.status(201).send(safeUser);
 }
+
+export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
+  const { id } = request.params as { id: string };
+  const { sub: authenticatedUserId } = request.user as { sub: string };
+
+  if (id !== authenticatedUserId) {
+    return reply.status(403).send({ error: 'You can only delete your own account' });
+  }
+
+  await prisma.user.delete({ where: { id } });
+
+  return reply.status(204).send();
+}
