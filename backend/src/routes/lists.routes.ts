@@ -5,11 +5,44 @@ import {
   getMyLists,
   getListById,
   deleteList,
-} from '../controllers/lists.controllers';
+} from '../controllers/lists.controller';
 
 export async function listsRoutes(app: FastifyInstance) {
-  app.post('/lists',       { preHandler: authenticate , schema: { tags: ['Lists'] } }, createList );
-  app.get('/lists',        { preHandler: authenticate , schema: { tags: ['Lists'] } }, getMyLists );
-  app.get('/lists/:id',    { preHandler: authenticate , schema: { tags: ['Lists'] } }, getListById);
-  app.delete('/lists/:id', { preHandler: authenticate , schema: { tags: ['Lists'] } }, deleteList );
+  app.post('/lists', {
+    preHandler: authenticate,
+    schema: {
+      tags: ['Lists'],
+      body: {
+        type: 'object',
+        required: ['name'],
+        properties: {
+          name: { type: 'string' },
+        },
+      },
+    },
+  }, createList);
+
+  app.get('/lists', { preHandler: authenticate, schema: { tags: ['Lists'] } }, getMyLists);
+
+  app.get('/lists/:id', {
+    preHandler: authenticate,
+    schema: {
+      tags: ['Lists'],
+      params: {
+        type: 'object',
+        properties: { id: { type: 'string' } },
+      },
+    },
+  }, getListById);
+
+  app.delete('/lists/:id', {
+    preHandler: authenticate,
+    schema: {
+      tags: ['Lists'],
+      params: {
+        type: 'object',
+        properties: { id: { type: 'string' } },
+      },
+    },
+  }, deleteList);
 }

@@ -20,15 +20,30 @@ async function main() {
     secret: process.env.JWT_SECRET || 'default_secret',
   });
 
-  await app.register(swagger, {
-    openapi: {
-      info: {
-        title: 'Smart Grocery List API',
-        description: 'AI-powered grocery list app — backend API',
-        version: '1.0.0',
+ await app.register(swagger, {
+  openapi: {
+    info: {
+      title: 'Smart Grocery List API',
+      description: 'AI-powered grocery list app — backend API',
+      version: '1.0.0',
+    },
+    tags: [
+      { name: 'Auth', description: 'Login and authentication' },
+      { name: 'Users', description: 'User registration and management' },
+      { name: 'Lists', description: 'Shopping lists' },
+      { name: 'Items', description: 'Items within a shopping list' },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
       },
     },
-  });
+  },
+});
 
   await app.register(swaggerUi, {
     routePrefix: '/api-docs',
