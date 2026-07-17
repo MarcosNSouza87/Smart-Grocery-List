@@ -7,6 +7,7 @@ export async function itemsRoutes(app: FastifyInstance) {
     preHandler: authenticate,
     schema: {
       tags: ['Items'],
+      security: [{ bearerAuth: [] }],
       params: {
         type: 'object',
         properties: { listId: { type: 'string' } },
@@ -28,6 +29,7 @@ export async function itemsRoutes(app: FastifyInstance) {
     preHandler: authenticate,
     schema: {
       tags: ['Items'],
+      security: [{ bearerAuth: [] }],
       params: {
         type: 'object',
         properties: { id: { type: 'string' } },
@@ -49,6 +51,7 @@ export async function itemsRoutes(app: FastifyInstance) {
     preHandler: authenticate,
     schema: {
       tags: ['Items'],
+      security: [{ bearerAuth: [] }],
       params: {
         type: 'object',
         properties: { id: { type: 'string' } },
