@@ -36,7 +36,34 @@ export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(403).send({ error: 'You can only delete your own account' });
   }
 
-  await prisma.user.delete({ where: { id } });
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) {
+    return reply.status(404).send({ error: 'User not found' });
+  }
+
+  await prisma.$transaction(async (tx) => {
+    // Lists where this user is the ONLY member get fully deleted (items + list)
+    const memberships = await tx.listMember.findMany({
+      where: { userId: id },
+      include: { list: { include: { members: true } } },
+    });
+
+    for (const membership of memberships) {
+      const isOnlyMember = membership.list.members.length === 1;
+
+      if (isOnlyMember) {
+        await tx.item.deleteMany({ where: { listId: membership.listId } });
+        await tx.listMember.deleteMany({ where: { listId: membership.listId } });
+        await tx.list.delete({ where: { id: membership.listId } });
+      } else {
+        // Shared list — just remove this user's membership, keep the list intact
+        await tx.listMember.delete({ where: { id: membership.id } });
+      }
+    }
+
+    await tx.historyItem.deleteMany({ where: { userId: id } });
+    await tx.user.delete({ where: { id } });
+  });
 
   return reply.status(204).send();
 }
