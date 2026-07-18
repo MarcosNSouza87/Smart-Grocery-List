@@ -105,7 +105,7 @@ npm run test
 - [x] Authentication (email/password + JWT)
 - [x] Google OAuth login *(implemented — not yet tested end-to-end)*
 - [x] Lists & Items CRUD (authenticated)
-- [ ] User deletion with related data (cascade/soft delete)
+- [x] User deletion with related data (cascade/soft delete)
 - [ ] AI-powered quick add (free-text parsing via Claude API)
 - [ ] Smart categorization
 - [ ] Purchase history tracking
