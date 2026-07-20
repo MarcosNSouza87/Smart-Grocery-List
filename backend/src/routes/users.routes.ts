@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { authenticate } from '../middlewares/auth.middleware';
-import { createUser, deleteUser } from '../controllers/users.controller';
+import { createUser, getMe, updateUser, deleteUser } from '../controllers/users.controller';
 
 export async function usersRoutes(app: FastifyInstance) {
   app.post('/users', {
@@ -18,6 +18,27 @@ export async function usersRoutes(app: FastifyInstance) {
     },
   }, createUser);
 
+  app.get('/users/me', {
+    preHandler: authenticate,
+    schema: { tags: ['Users'], security: [{ bearerAuth: [] }] },
+  }, getMe);
+
+  app.patch('/users/:id', {
+    preHandler: authenticate,
+    schema: {
+      tags: ['Users'],
+      security: [{ bearerAuth: [] }],
+      params: { type: 'object', properties: { id: { type: 'string' } } },
+      body: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          email: { type: 'string', format: 'email' },
+        },
+      },
+    },
+  }, updateUser);
+
   app.delete('/users/:id', {
     preHandler: authenticate,
     schema: {
@@ -29,6 +50,4 @@ export async function usersRoutes(app: FastifyInstance) {
       },
     },
   }, deleteUser);
-
-
 }

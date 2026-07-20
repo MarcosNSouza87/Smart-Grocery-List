@@ -28,6 +28,51 @@ export async function createUser(request: FastifyRequest, reply: FastifyReply) {
   return reply.status(201).send(safeUser);
 }
 
+export async function getMe(request: FastifyRequest, reply: FastifyReply) {
+  const { sub: userId } = request.user as { sub: string };
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+
+  if (!user) {
+    return reply.status(404).send({ error: 'User not found' });
+  }
+
+  const { password, ...safeUser } = user;
+  return reply.send(safeUser);
+}
+
+export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
+  const { id } = request.params as { id: string };
+  const { sub: authenticatedUserId } = request.user as { sub: string };
+
+  if (id !== authenticatedUserId) {
+    return reply.status(403).send({ error: 'You can only update your own account' });
+  }
+
+  const { name, email } = request.body as { name?: string; email?: string };
+
+  if (!name && !email) {
+    return reply.status(400).send({ error: 'Nothing to update' });
+  }
+
+  if (email) {
+    const existing = await prisma.user.findFirst({
+      where: { email, NOT: { id } },
+    });
+    if (existing) {
+      return reply.status(409).send({ error: 'Email already in use' });
+    }
+  }
+
+  const user = await prisma.user.update({
+    where: { id },
+    data: { name, email },
+  });
+
+  const { password, ...safeUser } = user;
+  return reply.send(safeUser);
+}
+
 export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
   const { id } = request.params as { id: string };
   const { sub: authenticatedUserId } = request.user as { sub: string };
@@ -67,3 +112,4 @@ export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
 
   return reply.status(204).send();
 }
+
