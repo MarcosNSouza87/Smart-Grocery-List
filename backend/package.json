@@ -11,7 +11,8 @@
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
     "test": "dotenv -e .env.test -- vitest run",
-    "test:watch": "dotenv -e .env.test -- vitest"
+    "test:watch": "dotenv -e .env.test -- vitest",
+    "t": "dotenv -e .env.test -- vitest run"
   },
   "keywords": [],
   "author": "",
