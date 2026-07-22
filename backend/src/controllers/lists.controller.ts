@@ -52,6 +52,31 @@ export async function getListById(request: FastifyRequest, reply: FastifyReply) 
   return reply.send(list);
 }
 
+export async function updateList(request: FastifyRequest, reply: FastifyReply) {
+  const { id } = request.params as { id: string };
+  const { sub: userId } = request.user as AuthPayload;
+  const { name } = request.body as { name?: string };
+
+  if (!name) {
+    return reply.status(400).send({ error: 'Name is required' });
+  }
+
+  const membership = await prisma.listMember.findUnique({
+    where: { userId_listId: { userId, listId: id } },
+  });
+
+  if (!membership) {
+    return reply.status(403).send({ error: 'You do not have access to this list' });
+  }
+
+  const list = await prisma.list.update({
+    where: { id },
+    data: { name },
+  });
+
+  return reply.send(list);
+}
+
 export async function deleteList(request: FastifyRequest, reply: FastifyReply) {
   const { id } = request.params as { id: string };
 
