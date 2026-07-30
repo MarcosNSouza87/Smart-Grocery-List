@@ -9,7 +9,8 @@ Backend API for the Smart Grocery List app — an AI-powered grocery list that l
 - **Framework:** Fastify
 - **Language:** TypeScript
 - **Database:** SQLite (via Prisma ORM)
-- **Auth:** JWT (`@fastify/jwt`) + Google OAuth
+- **Auth:** JWT (`@fastify/jwt`) + Google OAuth *(implemented — not yet tested end-to-end)*
+- **Testing:** Vitest (35 tests covering auth, users, lists, and items)
 - **Real-time:** Socket.io *(planned — shared lists)*
 - **AI:** Claude API (`@anthropic-ai/sdk`) *(planned)*
 - **API Docs:** Swagger (`@fastify/swagger` + `@fastify/swagger-ui`)
@@ -105,13 +106,13 @@ npm run test
 - [x] Authentication (email/password + JWT)
 - [x] Google OAuth login *(implemented — not yet tested end-to-end)*
 - [x] Lists & Items CRUD (authenticated)
-- [x] User deletion with related data (cascade/soft delete)
+- [x] User deletion with related data (cascade delete)
+- [x] Automated tests (Vitest) — 35 tests covering auth, users, lists, and items
 - [ ] AI-powered quick add (free-text parsing via Claude API)
 - [ ] Smart categorization
 - [ ] Purchase history tracking
 - [ ] Predictive re-purchase suggestions
 - [ ] Real-time shared lists (Socket.io)
-- [ ] Automated tests (Jest/Vitest)
 - [ ] CI (GitHub Actions)
 - [ ] Deployment (Railway/Render)
 

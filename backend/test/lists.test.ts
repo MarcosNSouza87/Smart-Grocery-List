@@ -110,30 +110,30 @@ describe('GET /lists (Read - all)', () => {
 });
 
 describe('GET /lists/:id (Read - one)', () => {
-  it('returns a list with its items', async () => {
-    const { token } = await createAndLoginUser();
+it('returns a list with its items', async () => {
+  const { token } = await createAndLoginUser();
 
-    const createResponse = await app.inject({
-      method: 'POST',
-      url: '/lists',
-      headers: { authorization: `Bearer ${token}` },
-      payload: { name: 'List With Items' },
-    });
-
-    const list = createResponse.json();
-
-    const response = await app.inject({
-      method: 'GET',
-      url: `/lists/${list.id}`,
-      headers: { authorization: `Bearer ${token}` },
-    });
-
-    const body = response.json();
-
-    expect(response.statusCode).toBe(200);
-    expect(body.id).toBe(list.id);
-    expect(Array.isArray(body.items)).toBe(true);
+  const createResponse = await app.inject({
+    method: 'POST',
+    url: '/lists',
+    headers: { authorization: `Bearer ${token}` },
+    payload: { name: 'List With Items' },
   });
+
+  const list = createResponse.json();
+
+  const response = await app.inject({
+    method: 'GET',
+    url: `/lists/${list.id}`,
+    headers: { authorization: `Bearer ${token}` },
+  });
+
+  const body = response.json();
+
+  expect(response.statusCode).toBe(200);
+  expect(body.id).toBe(list.id);
+  expect(Array.isArray(body.items)).toBe(true);
+});
 
   it('returns 404 for a non-existent list', async () => {
     const { token } = await createAndLoginUser();
